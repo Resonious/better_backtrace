@@ -27,5 +27,15 @@ class Dog < Animal
   end
 end
 
-the_dog = Dog.new
-the_dog.reply 'heeeeey'
+def do_it(message)
+  the_dog = Dog.new
+  yield message, the_dog
+end
+
+def should_not_be_in_trace
+  'yeas'
+end
+
+do_it should_not_be_in_trace do |m, what|
+  what.reply m + ' ++++'
+end

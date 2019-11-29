@@ -10,3 +10,9 @@ Naming/AccessorMethodName:
 
 Layout/MultilineMethodCallIndentation:
   Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
+Style/StructInheritance:
+  Enabled: false
