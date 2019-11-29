@@ -6,13 +6,12 @@ module BetterBacktrace
     def initialize
       @frames = []
 
-      @backtrace = nil
       @exception = nil
 
       @trace_points = []
       @trace_points << TracePoint.new(:call, :b_call, :class, &method(:push))
       @trace_points << TracePoint.new(:return, :b_return, :end, &method(:pop))
-      @trace_points << TracePoint.new(:raise, &method(:modify_exception))
+      # @trace_points << TracePoint.new(:raise, &method(:modify_exception))
     end
 
     def start
@@ -23,15 +22,23 @@ module BetterBacktrace
       @trace_points.each(&:disable)
     end
 
+    def backtrace
+      @frames.map(&:to_s)
+    end
+
     private
 
     def padding
       ' ' * @frames.size
     end
 
-    def push(tp)
+    def push(_tp)
+      @frames.clear
+    end
+
+    def pop(tp)
       caller = caller_locations(1..1).first
-      puts "#{padding}PUSH(#{tp.event}) #{caller}"
+      # puts "#{padding}POP(#{tp.event}) #{caller}"
 
       @frames << Frame.new(
         tp.path, caller.lineno, tp.method_id,
@@ -39,34 +46,9 @@ module BetterBacktrace
       )
     end
 
-    def pop(tp)
-      popped = @frames.pop
-      caller = caller_locations(1..1).first
-
-      # Follow unwind
-      if @backtrace
-        popped.line = caller.lineno
-        @backtrace << popped
-
-        # TODO this is not correct... we need to account for rescued
-        # exceptions :(
-        set_and_clear_backtrace if @frames.empty?
-      else
-        puts "#{padding}POP(#{tp.event}) #{caller}"
-      end
-    end
-
-    def modify_exception(tp)
-      puts "#{padding}RAISE (#{@frames.size} frames)"
-      @exception = tp.raised_exception
-      @backtrace = []
-    end
-
-    def set_and_clear_backtrace
-      @exception.set_backtrace @backtrace.map(&:to_s)
-      puts "#{padding}UNWIND(#{@exception})"
-      @backtrace = nil
-      @exception = nil
-    end
+    # def modify_exception(tp)
+    #   puts "#{padding}RAISE (#{@frames.size} frames)"
+    #   @exception = tp.raised_exception
+    # end
   end
 end

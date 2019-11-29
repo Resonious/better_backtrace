@@ -3,12 +3,12 @@
 module BetterBacktrace
   # Overrides Exception#backtrace
   module ExceptionExt
-    def backtrace
+    def initialize(*args)
+      result = super
       if BetterBacktrace.enabled?
-        # TODO
-      else
-        super
+        set_backtrace(Thread.current[:_better_backtrace_trace].backtrace)
       end
+      result
     end
   end
 end

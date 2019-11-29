@@ -4,6 +4,7 @@ require 'better_backtrace/version'
 require 'better_backtrace/frame'
 require 'better_backtrace/trace'
 require 'better_backtrace/thread_ext'
+require 'better_backtrace/exception_ext'
 
 # Improves backtraces by including class names and method arguments
 module BetterBacktrace
@@ -32,7 +33,8 @@ module BetterBacktrace
   end
 end
 
+StandardError.prepend BetterBacktrace::ExceptionExt
+# TODO thread also
+
 # Set up by default for now
 BetterBacktrace.setup
-
-# TODO thread ext
