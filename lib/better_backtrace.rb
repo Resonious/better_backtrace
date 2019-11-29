@@ -21,6 +21,10 @@ module BetterBacktrace
       trace.stop
     end
 
+    def enabled?(thread = Thread.current)
+      !!thread[:_better_backtrace_trace]
+    end
+
     def setup
       enable
       Thread.singleton_class.prepend ThreadExt
@@ -30,3 +34,5 @@ end
 
 # Set up by default for now
 BetterBacktrace.setup
+
+# TODO thread ext

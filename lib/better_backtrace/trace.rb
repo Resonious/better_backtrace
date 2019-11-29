@@ -31,7 +31,7 @@ module BetterBacktrace
 
     def push(tp)
       caller = caller_locations(1..1).first
-      # puts "#{padding}PUSH(#{tp.event}) #{caller}"
+      puts "#{padding}PUSH(#{tp.event}) #{caller}"
 
       @frames << Frame.new(
         tp.path, caller.lineno, tp.method_id,
@@ -48,20 +48,23 @@ module BetterBacktrace
         popped.line = caller.lineno
         @backtrace << popped
 
+        # TODO this is not correct... we need to account for rescued
+        # exceptions :(
         set_and_clear_backtrace if @frames.empty?
+      else
+        puts "#{padding}POP(#{tp.event}) #{caller}"
       end
-
-      # puts "#{padding}POP(#{tp.event}) #{caller}"
     end
 
     def modify_exception(tp)
-      # puts "#{padding}RAISE (#{@frames.size} frames)"
+      puts "#{padding}RAISE (#{@frames.size} frames)"
       @exception = tp.raised_exception
       @backtrace = []
     end
 
     def set_and_clear_backtrace
       @exception.set_backtrace @backtrace.map(&:to_s)
+      puts "#{padding}UNWIND(#{@exception})"
       @backtrace = nil
       @exception = nil
     end
