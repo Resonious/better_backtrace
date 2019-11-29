@@ -1,0 +1,12 @@
+---
+Metrics/LineLength:
+  Max: 130
+
+Metrics/ParameterLists:
+  Max: 10
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
