@@ -36,6 +36,8 @@ def should_not_be_in_trace
   'yeas'
 end
 
-do_it should_not_be_in_trace do |m, what|
-  what.reply m + ' ++++'
+class NewGuy
+  do_it should_not_be_in_trace do |m, what|
+    what.reply m + ' ++++'
+  end
 end

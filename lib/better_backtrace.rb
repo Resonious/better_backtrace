@@ -19,6 +19,7 @@ module BetterBacktrace
       return unless (trace = thread[:_better_backtrace_trace])
 
       trace.stop
+      thread[:_better_backtrace_trace] = nil
     end
 
     def enabled?(thread = Thread.current)
