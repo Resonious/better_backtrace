@@ -36,4 +36,4 @@ end
 # Set up by default for now
 BetterBacktrace.setup
 
-# TODO thread ext
+Thread.prepend BetterBacktrace::ThreadExt

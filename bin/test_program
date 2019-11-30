@@ -38,6 +38,13 @@ end
 
 class NewGuy
   do_it should_not_be_in_trace do |m, what|
-    what.reply m + ' ++++'
   end
 end
+
+t = Thread.new do
+  do_it should_not_be_in_trace do |m, what|
+    what.reply m + 'Thread internal!!!'
+  end
+end
+
+t.join
